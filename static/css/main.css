@@ -1,0 +1,127 @@
+body {
+    background-color: #000000;
+    color: #FF9999;
+}
+
+a {color: #DD0000; text-decoration: none;}
+a:visited {color:#DD0000;}
+a:hover {color:#FF0000;}
+
+input, textarea {
+    background-color: #FFBBBB;
+}
+
+#nav a {
+    padding-left: 1em;
+    font-size:1em;
+}
+
+#header {
+    margin-left: 3%;
+    font-size: 1.5em;
+    color: #DD9999;
+}
+
+#header a {
+    color:#FF9999;
+}
+
+#search {
+    display: inline-block;
+}
+
+#search input, #send input {
+    margin-left: 1em;
+}
+
+#menu {
+    /*padding-left: 3%;
+    padding-top: 4px;
+    position: absolute;*/
+    float:left;
+    z-index: 1;
+    background-color: #000;
+}
+
+#menu a, #menu form {
+    display: block;
+    margin-top:0;
+    border: 1px solid #DD0000;
+    padding: 4px;
+}
+
+#menu::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+#rooms {
+    float: left;
+    width: 15%;
+    padding-left: 2%;
+}
+
+#content {
+    float: left;
+    width: 85%;
+    padding-left: 4%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#navmenu {
+    display: inline-block;
+}
+
+
+#menu_icon {
+    display: none;
+}
+
+@media screen and (max-width: 550px) {
+    #content {
+        float: none;
+        width: 100%;
+    }
+    #rooms {
+        float: none;
+        width: 100%;
+    }
+    #menu_icon {
+        display:"";
+    }
+    #navmenu {
+        display:none;
+    }
+    #menu_icon {
+        display: inline-block;
+    }
+}
+
+#info {
+    margin: 3%;
+}
+
+#messages {
+    padding-left: 1em;
+    display: inline-block;
+}
+
+#messages li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0.5em;
+}
+
+#footer {
+    text-align: center;
+}
+
+#footer hr {
+    width: 95%;
+}

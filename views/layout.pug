@@ -1,0 +1,31 @@
+doctype html
+html(lang='en')
+  head
+    title= title
+    meta(charset='utf-8')
+    link(rel="stylesheet", href="/css/main.css")
+  body
+    div(id="header")
+      a(href="/catalog")
+        p &#9760; BLOODY HELL &#9760;
+    div(class="row")
+      div(id="nav")
+        a(href="/catalog", id="homelink") Catalog
+        span(id="navmenu")
+          a(href="/room/create") Create room
+          a(href="/user/registration") Register
+          a(href="/user/login") Log in
+          form(action="javascript:void(0)", id="search")
+            input(type="text", name="search", id="search_string")
+            input(type="submit", value="Search")
+        a(href="javascript:void(0);" id="menu_icon" onclick="showMenu.call(this)")
+          img(src="/images/menu.png")
+
+      div(id="content")
+        block content
+
+    div(id="footer") 
+      hr
+    
+    script(src="/js/main.js")
+      

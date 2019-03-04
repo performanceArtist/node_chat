@@ -1,0 +1,18 @@
+extends layout 
+
+block content
+  p Welcome to #{name}, #{username}
+  span(class="room", id=name)
+  span(class="user", id=username)
+  p Online:
+  ul#online
+    each val in users
+      li(id=val) #{val}
+
+  form(id="send" action="", onsubmit="sendMessage(event)")
+    input#message(type="text")
+    input(type="submit", value="Send")
+  ul#messages
+
+  script(src="/socket.io/socket.io.js")
+  script(src="/js/socket.js")

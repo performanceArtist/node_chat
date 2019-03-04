@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  form(action="", method="POST")
+    p
+      input(type="text", name="name", placeholder="Room name", required="true")
+    p
+      textarea(name="info", cols="30", rows="10", placeholder="Room info")
+    p
+      input(type="text", name="max_users" placeholder="Max users")
+    p
+      input(type="password", name="password", placeholder="Password(optional)")
+    p Private
+      input(type="radio", name="private")
+    p
+      input(type="submit", value="Submit")
