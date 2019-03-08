@@ -1,4 +1,9 @@
-# Node chat, with rooms and optional registration
+# node_chat
 
-## Details
-This version is not final. 
+## Summary
+
+Node chat, with rooms and optional registration
+
+## Notes
+
+This version is not final.
