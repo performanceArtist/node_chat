@@ -1,6 +1,7 @@
 var User = require("../models/user"),
     nodemailer = require("nodemailer"),
-    uuidv4 = require("uuid/v4");
+    uuidv4 = require("uuid/v4"),
+    config = require("../config.json");
 
 exports.regform = function(req, res) {
     res.render("regform");
@@ -10,31 +11,24 @@ exports.user_info = function(req, res, next) {
     User.findOne({username:req.params.username}, function(err, user) {
         if(err) return next(err);
         if(!user) {
-            res.send("User not found.");
-            return;
+            return next(new Error('User not found.'));
         }
         res.render("user_info", {username: user.username});
     });
 }
 
-exports.registration = function(req, res) {
+exports.registration = function(req, res, next) {
     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/,
-        nameRegex = /^[a-zA-Z_]+$/,
-        error = "";
+        nameRegex = /^[a-zA-Z_0-9]+$/,
         hash = uuidv4();
 
-        if(!emailRegex.test(req.body.email)) {
-            error += "Invalid email.<br>";
-        }
-
-        if(!nameRegex.test(req.body.username)) {
-            error += "Invalid username(use only alphabet symbols and underscores).<br>";
-        }
+    if(!emailRegex.test(req.body.email)) {
+        return next(new Error("Invalid email."));
+    }
+    if(!nameRegex.test(req.body.username)) {
+        return next(new Error("Invalid username(use only alphabet symbols and underscores)."));
+    }
         
-        if(error) {
-            res.send(error);
-            return;
-        }
         
     var user = new User({
         username:req.body.username,
@@ -45,30 +39,30 @@ exports.registration = function(req, res) {
 
     user.save(function(err) {
         if(err) return next(err);
-        sendMail(req.body.email, hash);
+        sendMail(req.body.email, hash, next);
         res.send("Success! Check your email to complete registration.");
     });
 }
 
-function sendMail(email, hash) {
+function sendMail(email, hash, next) {
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: config.email.service,
         auth: {
-          user: 'nakedant19@gmail.com',
-          pass: 'fakeandgay'
+          user: config.email.user,
+          pass: config.email.password
         }
     });
 
     var mailOptions = {
-        from: 'nakedant19@gmail.com',
+        from: config.email.user,
         to: email,
         subject: 'Confirm registration on somesite.com',
         text: 'Your link: http://192.168.80.3:5000/user/registration/confirm/' + hash
       };
 
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
+    transporter.sendMail(mailOptions, function(err, info){
+        if (err) {
+            return next(err);
         } else {
           console.log('Email sent: ' + info.response);
         }
@@ -78,15 +72,14 @@ function sendMail(email, hash) {
 exports.confirm_registration = function(req, res, next) {
     var hash = req.params.hash;
     User.findOne({hash:hash}, function(err, user) {
-        if(err) return (err);
+        if(err) return next(err);
         if(user.active !== 'false') {
-            res.send("This user is already active.");
-            return;
+            return next(new Error("This user is already active."));
         }
         user.active = true;
         user.hash = undefined;
         user.save();
-        res.send("Confirmed successfully.");
+        res.render("info", {info:"Confirmed successfully."});
     });
 }
 
@@ -99,21 +92,18 @@ exports.login = function(req, res, next) {
         if(err) return next(err);
 
         if(!user) {
-            res.send("No user with such name(" + req.body.username + ');');
-            return;
+            return next(new Error("No user with such name(" + req.body.username + ');'));
         }
 
         if(user.hash && user.active === 'false') {
-            res.send("This login hasn't been confirmed.");
-            return;
+            next(new Error("This login hasn't been confirmed."));
         }
 
         user.comparePassword(req.body.password, function(err, match) {
             if(err) return next(err);
 
             if(!match) {
-                res.send("Wrong password");
-                return;
+                return next(new Error("Wrong password"));
             }
             req.session.user = user._id;
             res.redirect("/catalog");

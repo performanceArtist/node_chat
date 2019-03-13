@@ -9,6 +9,7 @@ socket.on('connect', function() {
 });
 
 socket.on('new_user', function(name) {
+	if(document.getElementById(name)) return;
     document.getElementById("online").innerHTML += '<li id="' + name + '">' + name + '</li>';
 });
 
@@ -30,7 +31,7 @@ socket.on('chat_message', function(msg){
 function sendMessage(e) {
     e.preventDefault();
     var el = document.getElementById("message");
-    console.log(el.value);
+    //console.log(el.value);
     if(el.value) {
         socket.emit("chat_message", {message:el.value, user:user});
         el.value = "";

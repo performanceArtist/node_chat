@@ -1,5 +1,5 @@
 {
-  "name": "game2",
+  "name": "node_chat",
   "version": "1.0.0",
   "description": "Rooms and stuff",
   "main": "server.js",
