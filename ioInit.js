@@ -6,12 +6,16 @@ module.exports = function(server) {
     io.on("connection", function(socket) {
         socket.on("room", function(room) {
             console.log(room.user + " connected");
+
             socket.join(room.room);
-            io.in(room.room).emit('new_user', room.user);
+            io.in(room.room).emit('new_user', {user:room.user, username:room.username});
+
             socket.on('chat_message', function(msg){
                 io.in(room.room).emit('chat_message', msg);
             });
+
             socket.on('disconnect', function() {
+                console.log(room.user);
                 Room.findOne({name:room.room}, function(err, rmm) {
                     if(err) next(err);
                     rmm.removeUser(room.user);
@@ -20,6 +24,7 @@ module.exports = function(server) {
                 });
                 console.log(room.user + " disconnected");
             });
+
         });
     });
     return io;

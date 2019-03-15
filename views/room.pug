@@ -1,18 +1,26 @@
 extends layout 
 
 block content
-  p Welcome to #{name}, #{username}
-  span(class="room", id=name)
-  span(class="user", id=username)
-  p Online:
-  ul#online
-    each val in users
-      li(id=val) #{val}
+  div#onlinecol Welcome to 
+    span#thisroom #{roomname}
+    .
+      , 
+    if(typeof(user) === 'undefined')
+      span#thisuser 
+        span(class = "user") #{username}
+    else
+      span#thisuser
+        span(class = "registered_user") #{username}
+    p Online:
+    ul#online
+      each val in users
+        li(id=val) #{val}
 
-  form(id="send" action="", onsubmit="sendMessage(event)")
-    input#message(type="text")
-    input(type="submit", value="Send")
-  ul#messages
+  div#mescol
+    div#messages
+    form(id="sendform" action="", onsubmit="sendMessage(event)")
+      input#message(type="text")
+      input#sendmessage(type="submit", value="Send")
 
   script(src="/socket.io/socket.io.js")
   script(src="/js/socket.js")

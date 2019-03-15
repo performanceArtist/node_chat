@@ -1,11 +1,12 @@
 extends layout
 
 block content
-  ul(id="rooms")
-    each val in rooms
-      unless val.private
-        li
-          a(class="room_link", href="javascript:void(0)")= val.name
-
-  div#info Welcome
-    
+  div#roomcol
+    ul(id="rooms")
+      each val in rooms
+        unless val.private
+          li
+            a(class="room_link", id=val.name, href="javascript:void(0)") #{val.name} (#{val.users.length})
+  div#infocol
+    div#roominfo
+  script(src="/js/catalog.js")

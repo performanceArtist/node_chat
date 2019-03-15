@@ -2,8 +2,11 @@ p Name: #{name}
 p Info: #{info}
 
 form(action="/room/join/" + name, method="POST")
-  p Username: 
-    input#username(type="text", name="username", required="true")
+  if (typeof(user) === "undefined")
+    p Username: 
+      input#username(type="text", name="username", required="true")
+  else
+    input#username(type="hidden", name="username", value=user.username)
   if password
     p Room password: 
       input#password(type="password", name="password", required="true")

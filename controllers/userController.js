@@ -25,10 +25,14 @@ exports.registration = function(req, res, next) {
     if(!emailRegex.test(req.body.email)) {
         return next(new Error("Invalid email."));
     }
+
+    if(req.body.username.length > 20) {
+        return next(new Error("20 characters maximum"));
+    }
+
     if(!nameRegex.test(req.body.username)) {
         return next(new Error("Invalid username(use only alphabet symbols and underscores)."));
     }
-        
         
     var user = new User({
         username:req.body.username,
@@ -40,7 +44,7 @@ exports.registration = function(req, res, next) {
     user.save(function(err) {
         if(err) return next(err);
         sendMail(req.body.email, hash, next);
-        res.send("Success! Check your email to complete registration.");
+        res.render("info", {info:"Success! Check your email to complete registration.", redirect:"/"});
     });
 }
 
@@ -57,7 +61,7 @@ function sendMail(email, hash, next) {
         from: config.email.user,
         to: email,
         subject: 'Confirm registration on somesite.com',
-        text: 'Your link: http://192.168.80.3:5000/user/registration/confirm/' + hash
+        text: 'Your link:' + config.server.host + '/user/registration/confirm/' + hash
       };
 
     transporter.sendMail(mailOptions, function(err, info){
@@ -79,15 +83,18 @@ exports.confirm_registration = function(req, res, next) {
         user.active = true;
         user.hash = undefined;
         user.save();
-        res.render("info", {info:"Confirmed successfully."});
+        res.render("info", {info:"Confirmed successfully.", redirect:"/"});
     });
 }
 
 exports.login_form = function(req, res) {
-    res.render("loginfrm");
+    res.render("loginform");
 }
 
 exports.login = function(req, res, next) {
+    if(typeof(req.session.user) !== 'undefined') {
+        return next(new Error("Already logged in."));
+    }
     User.findOne({username:req.body.username}, function(err, user) {
         if(err) return next(err);
 
@@ -105,8 +112,22 @@ exports.login = function(req, res, next) {
             if(!match) {
                 return next(new Error("Wrong password"));
             }
-            req.session.user = user._id;
+            req.session.user = user;
             res.redirect("/catalog");
         });
     });
+}
+
+exports.logout = function(req, res, next) {
+    if(typeof(req.session.user) === 'undefined') {
+        return next(new Error("Not logged in."));
+    }
+	req.session.destroy();
+	res.redirect("/");
+}
+
+exports.get_user = function(req, res, next) {
+    if(typeof(req.session.user) === "undefined") return res.send(JSON.stringify({}));
+    var user = req.session.user;
+    res.send(JSON.stringify({username:user.username}));
 }

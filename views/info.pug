@@ -1,4 +1,7 @@
 extends layout
 block content
   div(id="main")
-      p #{info}
+    p #{info}
+  if (typeof(redirect) !== 'undefined')
+    script.
+      setTimeout(function() {window.location.href = redirect;}, 3000);
