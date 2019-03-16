@@ -100,7 +100,7 @@ exports.join_room = function(req, res, next) {
                 if(!match) return next(new Error("Wrong password"));
 
                 res.render("room", 
-                           {name:room.name, username:req.body.username, users:room.users}, 
+                           {roomname:room.name, username:req.body.username, users:room.users}, 
                            function(err, html) {
                                if(err) return next(err);
                                room.users.push(req.body.username);
