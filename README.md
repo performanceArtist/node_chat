@@ -1,5 +1,7 @@
 # node_chat
 
+![screenshot](screenshot.png)
+
 ## Summary
 
 Node chat, with rooms and optional registration.
