@@ -1,4 +1,4 @@
-var socket = io.connect("https://serene-garden-34343.herokuapp.com");
+var socket = io.connect("heroku_host");
 var room = document.getElementById("thisroom").innerHTML;
 var showuser = document.getElementById("thisuser").innerHTML;
 var user = document.querySelector("#thisuser span").innerHTML;
