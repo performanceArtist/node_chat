@@ -1,4 +1,4 @@
-var socket = io.connect("https://guarded-island-67241.herokuapp.com");
+var socket = io.connect("https://serene-garden-34343.herokuapp.com");
 var room = document.getElementById("thisroom").innerHTML;
 var showuser = document.getElementById("thisuser").innerHTML;
 var user = document.querySelector("#thisuser span").innerHTML;
