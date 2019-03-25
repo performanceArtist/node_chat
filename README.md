@@ -1,6 +1,6 @@
 # node_chat
 
-![screenshot](screenshot.png)
+![screenshot](screenshot.jpg)
 
 ## Summary
 
